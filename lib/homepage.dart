@@ -32,7 +32,7 @@ class _HomepageState extends State<Homepage> {
       await audioPlayer.setUrl(filePath);
       await audioPlayer.play();
     } catch (e) {
-      print('Error playing audio: $e');
+      debugPrint('Error playing audio: $e');
     }
   }
 
@@ -88,7 +88,7 @@ class _HomepageState extends State<Homepage> {
     if (status.isGranted) {
       _loadMusicFiles();
     } else {
-      print('Permission Denied');
+      debugPrint('Permission Denied');
     }
   }
 
@@ -98,13 +98,9 @@ class _HomepageState extends State<Homepage> {
     });
 
     try {
-      
-      final musicDir = Directory(
-          '/storage/emulated/0/Music'); 
+      final musicDir = Directory('/storage/emulated/0/Music');
 
-      
       if (await musicDir.exists()) {
-       
         final List<FileSystemEntity> files = musicDir.listSync();
         setState(() {
           _musicFiles =
@@ -129,10 +125,8 @@ class _HomepageState extends State<Homepage> {
         body: RefreshIndicator(
           onRefresh: () async {
             return setState(() {
-               initState();
+              initState();
             });
-            
-           
           },
           child: SingleChildScrollView(
             child: Padding(

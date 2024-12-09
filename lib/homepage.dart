@@ -14,11 +14,16 @@ class _HomepageState extends State<Homepage> {
   Map<String, String> languageMap = {
     'en-US': 'English',
   };
+  @override
+  void initState() {
+    super.initState();
+    initTts();
+  }
 
   List<String> languages = [];
   String? selectedLanguage;
   double pitch = 1.0;
-  double speachRate = 1.0;
+  double speachRate = 0.0;
   double volume = 0.5;
 
   Future<void> initTts() async {
@@ -32,18 +37,6 @@ class _HomepageState extends State<Homepage> {
         )
         .toList();
     setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initTts();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    textEditingController.dispose();
   }
 
   Future<void> speak(String text) async {
@@ -63,17 +56,111 @@ class _HomepageState extends State<Homepage> {
 
     await flutterTts.synthesizeToFile(text, 'audio_bite$timespam.mp3');
   }
-  Future<void>stop()async{
+
+  Future<void> stop() async {
     flutterTts.stop();
   }
-   Future<void>puase()async{
+
+  Future<void> puase() async {
     flutterTts.pause();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return SafeArea(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TextField(
+                  maxLines: null,
+                  minLines: 3,
+                  controller: textEditingController,
+                  decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(),
+                      enabledBorder: OutlineInputBorder()),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            speak(textEditingController.text);
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.play_arrow,
+                          color: Colors.greenAccent,
+                        )),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            puase();
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.pause,
+                          color: Colors.amber,
+                        )),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            stop();
+                          });
+                        },
+                        icon: const Icon(
+                          Icons.stop,
+                          color: Colors.red,
+                        ))
+                  ],
+                ),
+                const Text('Volume '),
+                Slider(
+                  value: volume,
+                  onChanged: (value) {
+                    setState(() {
+                      volume = value;
+                    });
+                  },
+                ),
+                const Text('Pitch '),
+                Slider(
+                  value: pitch,
+                  onChanged: (value) {
+                    setState(() {
+                      pitch = value;
+                    });
+                  },
+                ),
+                const Text('Speach Rate '),
+                Slider(
+                  value: speachRate,
+                  onChanged: (value) {
+                    setState(() {
+                      speachRate = value;
+                    });
+                  },
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      save(textEditingController.text);
+                    },
+                    child: const Text("save audio"))
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    textEditingController.dispose();
   }
 }

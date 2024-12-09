@@ -39,6 +39,8 @@ dependencies:
   path_provider: ^2.1.5
   path: ^1.9.0
   permission_handler: ^11.3.1
+  just_audio: ^0.9.42
+  file_picker: ^8.1.4
 
 dev_dependencies:
   flutter_test:

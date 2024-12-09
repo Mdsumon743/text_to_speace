@@ -125,7 +125,7 @@ class _HomepageState extends State<Homepage> {
         body: RefreshIndicator(
           onRefresh: () async {
             return setState(() {
-              initState();
+              _loadMusicFiles();
             });
           },
           child: SingleChildScrollView(
